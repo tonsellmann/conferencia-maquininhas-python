@@ -10,7 +10,7 @@
   /* A demonstração usa o CSS do painel em Django; aqui só o que é dela: os arquivos, as taxas
      editáveis e o aviso de carregamento do Python. */
   .demo { display: grid; grid-template-columns: minmax(0, 320px) minmax(0, 1fr); gap: 28px; align-items: start; }
-  @media (max-width: 900px) { .demo { grid-template-columns: 1fr; } }
+  @media (max-width: 900px) { .demo { grid-template-columns: minmax(0, 1fr); } }
   .lado { display: grid; gap: 16px; position: sticky; top: 16px; }
   @media (max-width: 900px) { .lado { position: static; } }
   .caixa { padding: 16px; border-radius: var(--raio); background: var(--papel); border: 1px solid var(--linha); }
