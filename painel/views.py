@@ -2,6 +2,8 @@ from datetime import date
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db import connection
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
@@ -9,6 +11,13 @@ from conferencia import conferir
 
 from .forms import EnvioDoMes
 from .models import Conferencia, tabela_de_taxas
+
+
+def saude(request):
+    """Para o healthcheck: responde se o banco responde."""
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT 1")
+    return JsonResponse({"ok": True})
 
 
 @login_required

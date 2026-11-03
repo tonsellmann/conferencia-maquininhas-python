@@ -7,10 +7,25 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 DEBUG = os.environ.get("DEBUG", "1") == "1"
-SECRET_KEY = os.environ.get("SEGREDO") or ("so-para-desenvolvimento" if DEBUG else None)
+
+
+def _segredo() -> str | None:
+    """Do ambiente, ou de um arquivo (o Docker monta os segredos em /run/secrets)."""
+    if os.environ.get("SEGREDO"):
+        return os.environ["SEGREDO"]
+    arquivo = os.environ.get("SEGREDO_ARQUIVO")
+    if arquivo and Path(arquivo).is_file():
+        return Path(arquivo).read_text(encoding="utf-8").strip() or None
+    return "so-para-desenvolvimento" if DEBUG else None
+
+
+SECRET_KEY = _segredo()
 if not SECRET_KEY:
-    raise RuntimeError("Defina a variável SEGREDO para rodar sem DEBUG.")
+    raise RuntimeError("Defina SEGREDO (ou SEGREDO_ARQUIVO) para rodar sem DEBUG.")
 ALLOWED_HOSTS = os.environ.get("HOSTS", "localhost,127.0.0.1").split(",")
+# Atrás do proxy (Caddy), o Django sabe que a conexão é HTTPS pelo cabeçalho que o proxy põe.
+CSRF_TRUSTED_ORIGINS = [o for o in os.environ.get("ORIGENS", "").split(",") if o]
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -58,7 +73,7 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = "static/"
-STATIC_ROOT = BASE_DIR / "estaticos"
+STATIC_ROOT = os.environ.get("ESTATICOS", BASE_DIR / "estaticos")
 
 LOGIN_URL = "admin:login"
 LOGIN_REDIRECT_URL = "painel:lista"

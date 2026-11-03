@@ -1,0 +1,11 @@
+.venv
+__pycache__
+*.sqlite3
+estaticos
+.git
+.github
+tests
+demo
+scripts
+.pytest_cache
+*.md

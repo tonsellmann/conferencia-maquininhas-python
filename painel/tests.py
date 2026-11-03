@@ -64,6 +64,9 @@ class PainelTest(TestCase):
         self.assertContains(self.client.post(reverse("painel:nova"), {"arquivos": [grande]}), "passa de 5 MB", status_code=400)
         self.assertFalse(Conferencia.objects.exists())
 
+    def test_healthcheck_responde_sem_login(self):
+        self.assertJSONEqual(self.client.get(reverse("painel:saude")).content, {"ok": True})
+
     def test_so_aceita_post_para_conferir(self):
         self.entrar()
         self.assertEqual(self.client.get(reverse("painel:nova")).status_code, 405)
