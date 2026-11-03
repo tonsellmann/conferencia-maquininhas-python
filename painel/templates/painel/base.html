@@ -1,0 +1,22 @@
+{% load static %}<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block titulo %}Conferência das maquininhas{% endblock %}</title>
+<link rel="stylesheet" href="{% static 'painel/painel.css' %}">
+</head>
+<body>
+<header class="topo">
+  <strong>Conferência das maquininhas</strong>
+  <nav>
+    <a href="{% url 'painel:lista' %}">Conferências</a>
+    <a href="{% url 'admin:painel_maquininha_changelist' %}">Taxas contratadas</a>
+  </nav>
+</header>
+<main class="pagina">
+  {% for mensagem in messages %}<p class="erros" role="status">{{ mensagem }}</p>{% endfor %}
+  {% block conteudo %}{% endblock %}
+</main>
+</body>
+</html>

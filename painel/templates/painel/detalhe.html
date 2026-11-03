@@ -1,0 +1,65 @@
+{% extends "painel/base.html" %}
+{% load dinheiro %}
+{% block titulo %}{{ conferencia }}{% endblock %}
+{% block conteudo %}
+<h1>{{ conferencia }}</h1>
+<p class="apoio">{{ conferencia.arquivos|length }} arquivos · conferida em {{ conferencia.criada_em|date:"d/m/Y H:i" }}{% if r.totais.conferido_ate %} · banco até {{ r.totais.conferido_ate|dia }}{% endif %}</p>
+
+{% if r.erros %}<ul class="erros">{% for erro in r.erros %}<li>{{ erro }}</li>{% endfor %}</ul>{% endif %}
+
+{% if r.totais %}
+<div class="numeros">
+  <div class="numero"><span>Vendido no cartão</span><strong>{{ r.totais.bruto|em_reais }}</strong></div>
+  <div class="numero"><span>Taxas pagas</span><strong>{{ r.totais.taxa|em_reais }}</strong></div>
+  <div class="numero{% if r.totais.cobrado_a_mais %} numero--alerta{% endif %}"><span>Cobrado acima do contratado</span><strong>{{ r.totais.cobrado_a_mais|em_reais }}</strong></div>
+  <div class="numero{% if r.totais.nao_recebido %} numero--alerta{% endif %}"><span>Previsto e não recebido</span><strong>{{ r.totais.nao_recebido|em_reais }}</strong></div>
+</div>
+{% endif %}
+
+<h2>O que conferir</h2>
+{% if r.alertas %}
+<ul class="alertas">
+  {% for a in r.alertas %}<li class="alerta alerta--{{ a.gravidade }}"><strong>{{ a.titulo }}</strong><p>{{ a.detalhe }}</p></li>{% endfor %}
+</ul>
+{% else %}
+<p class="tudo-certo">Tudo bate: taxas, vendas e depósitos.</p>
+{% endif %}
+
+{% if r.maquininhas %}
+<h2>Por maquininha</h2>
+<div class="rolagem"><table class="tabela">
+  <thead><tr><th>Maquininha</th><th class="n">Vendas</th><th class="n">Bruto</th><th class="n">Taxa paga</th><th class="n">Taxa efetiva</th><th class="n">A mais</th><th class="n">Líquido</th></tr></thead>
+  <tbody>
+  {% for m in r.maquininhas %}
+  <tr><td>{{ m.maquininha }}</td><td class="n">{{ m.vendas }}</td><td class="n">{{ m.bruto|em_reais }}</td><td class="n">{{ m.taxa|em_reais }}</td><td class="n">{{ m.taxa_efetiva|em_percentual }}</td><td class="n">{{ m.cobrado_a_mais|em_reais }}</td><td class="n">{{ m.liquido|em_reais }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+{% endif %}
+
+{% if r.vendas %}
+<h2>Vendas do caixa</h2>
+<p class="apoio">{{ r.vendas.no_cartao }} vendas no cartão: {{ r.vendas.casadas }} encontradas no extrato da maquininha (no máximo {{ r.vendas.maior_diferenca_minutos }} minutos de diferença), {{ r.vendas.sem_transacao }} sem transação e {{ r.vendas.sem_venda }} transação{{ r.vendas.sem_venda|pluralize:"ões" }} sem venda no caixa.</p>
+{% endif %}
+
+{% if r.depositos %}
+<h2>Depósitos</h2>
+<div class="rolagem"><table class="tabela">
+  <thead><tr><th>Dia</th><th>Maquininha</th><th class="n">Previsto</th><th class="n">Entrou</th><th>Situação</th></tr></thead>
+  <tbody>
+  {% for d in r.depositos %}{% if d.situacao != "ok" %}
+  <tr><td>{{ d.data|dia }}</td><td>{{ d.maquininha }}</td><td class="n">{{ d.previsto|em_reais }}</td><td class="n">{{ d.recebido|em_reais }}</td><td><span class="situacao {% if d.situacao == 'aguardando' %}situacao--espera{% else %}situacao--ruim{% endif %}">{{ d.situacao }}</span></td></tr>
+  {% endif %}{% endfor %}
+  </tbody>
+</table></div>
+<p class="apoio">Os outros depósitos do período entraram certos.</p>
+{% endif %}
+
+{% if r.agenda %}
+<h2>A receber</h2>
+<div class="rolagem"><table class="tabela">
+  <thead><tr><th>Dia</th><th>Maquininha</th><th class="n">Valor</th></tr></thead>
+  <tbody>{% for a in r.agenda|slice:":12" %}<tr><td>{{ a.data|dia }}</td><td>{{ a.maquininha }}</td><td class="n">{{ a.valor|em_reais }}</td></tr>{% endfor %}</tbody>
+</table></div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Conferência das maquininhas</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="painel.css">
+<style>
+  /* A demonstração usa o CSS do painel em Django; aqui só o que é dela: os arquivos, as taxas
+     editáveis e o aviso de carregamento do Python. */
+  .demo { display: grid; grid-template-columns: minmax(0, 320px) minmax(0, 1fr); gap: 28px; align-items: start; }
+  @media (max-width: 900px) { .demo { grid-template-columns: 1fr; } }
+  .lado { display: grid; gap: 16px; position: sticky; top: 16px; }
+  @media (max-width: 900px) { .lado { position: static; } }
+  .caixa { padding: 16px; border-radius: var(--raio); background: var(--papel); border: 1px solid var(--linha); }
+  .caixa h2 { margin: 0 0 8px; font-size: 15px; }
+  .arquivos { list-style: none; margin: 0 0 10px; padding: 0; display: grid; gap: 4px; font-size: 14px; }
+  .arquivos li { display: flex; justify-content: space-between; gap: 8px; }
+  .arquivos small { color: var(--suave); }
+  .taxas { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .taxas td { padding: 3px 0; }
+  .taxas td:first-child { color: var(--suave); }
+  .taxas input { width: 72px; padding: 4px 6px; border: 1px solid var(--linha); border-radius: 6px; font: inherit; text-align: right; }
+  .taxas input:focus { outline: 2px solid var(--info); border-color: var(--info); }
+  .taxas .maquininha td { padding-top: 10px; color: var(--tinta); font-weight: 700; }
+  .proprios { font-size: 14px; }
+  .proprios input { max-width: 100%; margin-top: 6px; }
+  .carregando { display: grid; gap: 10px; padding: 28px; border-radius: var(--raio); background: var(--papel); border: 1px solid var(--linha); }
+  .barra { height: 6px; border-radius: 99px; background: var(--linha); overflow: hidden; }
+  .barra i { display: block; height: 100%; width: 0; background: var(--tinta); transition: width .3s; }
+  .conceito { margin: 0; padding: 8px 16px; background: #313b52; color: #fff; font-size: 13px; text-align: center; }
+  code { font-size: 13px; }
+</style>
+<script type="module" src="demo.js"></script>
+</head>
+<body>
+<p class="conceito">Projeto conceito: a Padaria Bom Dia e as maquininhas Cartix, PagaJá e Vendemais são fictícias.</p>
+<header class="topo"><strong>Conferência das maquininhas</strong><nav><span>Padaria Bom Dia · outubro de 2026</span></nav></header>
+<main class="pagina demo">
+  <aside class="lado">
+    <section class="caixa" aria-labelledby="arquivos-titulo">
+      <h2 id="arquivos-titulo">Arquivos do mês</h2>
+      <ul class="arquivos" data-arquivos></ul>
+      <label class="proprios">Ou use os seus arquivos (nada sai do navegador):
+        <input type="file" multiple accept=".csv,text/csv" data-proprios>
+      </label>
+    </section>
+    <section class="caixa" aria-labelledby="taxas-titulo">
+      <h2 id="taxas-titulo">Taxas contratadas (%)</h2>
+      <table class="taxas"><tbody data-taxas></tbody></table>
+      <p class="apoio" style="font-size:13px;margin-top:10px">Ponha 3,29 no crédito à vista da Cartix e o alerta da taxa some.</p>
+    </section>
+  </aside>
+  <section aria-live="polite" data-relatorio>
+    <div class="carregando">
+      <strong data-etapa>Carregando o Python no navegador…</strong>
+      <div class="barra"><i data-progresso></i></div>
+      <p class="apoio">Python 3.14 e pandas, pelo Pyodide (uns 15 MB, só na primeira visita). A conferência é o mesmo código do painel em Django.</p>
+    </div>
+  </section>
+</main>
+</body>
+</html>

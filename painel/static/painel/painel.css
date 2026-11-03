@@ -1,0 +1,67 @@
+/* O painel da conferência: papel de extrato, números alinhados e uma cor para cada gravidade.
+   A demonstração do portfólio usa este mesmo arquivo. */
+:root {
+  --fundo: #f4f1ea;
+  --papel: #fffdf8;
+  --tinta: #1d2433;
+  --suave: #5c6474;
+  --linha: #e1dbcd;
+  --verde: #1f7a4d;
+  --verde-claro: #def0e4;
+  --alta: #b8322a;
+  --alta-claro: #f9e0dd;
+  --media: #9a5b00;
+  --media-claro: #fbecd2;
+  --info: #2f5d9e;
+  --info-claro: #e1e9f6;
+  --raio: 12px;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--fundo); color: var(--tinta); font: 16px/1.5 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+a { color: var(--info); }
+.topo { display: flex; align-items: center; gap: 16px; padding: 14px clamp(16px, 4vw, 40px); background: var(--tinta); color: #fff; }
+.topo strong { font-size: 18px; letter-spacing: -.01em; }
+.topo nav { margin-left: auto; display: flex; gap: 16px; font-size: 14px; }
+.topo a { color: #fff; opacity: .85; }
+.pagina { max-width: 1100px; margin: 0 auto; padding: 24px clamp(16px, 4vw, 40px) 48px; }
+h1 { margin: 0 0 4px; font-size: clamp(24px, 3vw, 32px); letter-spacing: -.02em; }
+h2 { margin: 32px 0 10px; font-size: 18px; }
+.apoio { margin: 0; color: var(--suave); }
+
+.numeros { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 20px; }
+.numero { padding: 16px 18px; border-radius: var(--raio); background: var(--papel); border: 1px solid var(--linha); }
+.numero span { display: block; color: var(--suave); font-size: 14px; }
+.numero strong { display: block; margin-top: 4px; font-size: 26px; font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+.numero small { color: var(--suave); }
+.numero--alerta strong { color: var(--alta); }
+
+.alertas { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.alerta { display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; padding: 12px 16px; border-radius: var(--raio); background: var(--papel); border-left: 5px solid var(--info); }
+.alerta::before { content: ''; grid-row: 1 / span 2; width: 10px; height: 10px; margin-top: 7px; border-radius: 50%; background: var(--info); }
+.alerta--alta { border-left-color: var(--alta); background: var(--alta-claro); }
+.alerta--alta::before { background: var(--alta); }
+.alerta--media { border-left-color: var(--media); background: var(--media-claro); }
+.alerta--media::before { background: var(--media); }
+.alerta strong { font-weight: 700; }
+.alerta p { grid-column: 2; margin: 0; color: var(--suave); font-size: 15px; }
+.tudo-certo { padding: 14px 16px; border-radius: var(--raio); background: var(--verde-claro); color: var(--verde); font-weight: 700; }
+
+.tabela { width: 100%; border-collapse: collapse; background: var(--papel); border-radius: var(--raio); overflow: hidden; border: 1px solid var(--linha); font-size: 15px; }
+.tabela th, .tabela td { padding: 10px 12px; border-bottom: 1px solid var(--linha); text-align: left; }
+.tabela th { background: #ece6d8; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--suave); }
+.tabela td.n, .tabela th.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tabela tr:last-child td { border-bottom: 0; }
+.rolagem { overflow-x: auto; }
+.situacao { display: inline-block; padding: 1px 8px; border-radius: 6px; font-size: 13px; font-weight: 700; }
+.situacao--ok { background: var(--verde-claro); color: var(--verde); }
+.situacao--ruim { background: var(--alta-claro); color: var(--alta); }
+.situacao--espera { background: var(--info-claro); color: var(--info); }
+
+.envio { display: grid; gap: 10px; padding: 18px; border-radius: var(--raio); background: var(--papel); border: 1px solid var(--linha); }
+.envio input[type=file] { padding: 10px; border: 2px dashed var(--linha); border-radius: 10px; background: var(--fundo); }
+.botao { justify-self: start; min-height: 44px; padding: 10px 20px; border: 0; border-radius: 10px; background: var(--tinta); color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+.erros { margin: 0; padding: 10px 14px; border-radius: 10px; background: var(--alta-claro); color: var(--alta); list-style: none; }
+.lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.lista a { display: flex; justify-content: space-between; gap: 12px; padding: 12px 16px; border-radius: 10px; background: var(--papel); border: 1px solid var(--linha); color: var(--tinta); text-decoration: none; }
+.lista a:hover { border-color: var(--tinta); }
+@media (max-width: 600px) { .tabela { font-size: 14px; } .tabela th, .tabela td { padding: 8px; } }

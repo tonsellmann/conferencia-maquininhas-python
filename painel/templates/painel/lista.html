@@ -1,0 +1,24 @@
+{% extends "painel/base.html" %}
+{% block conteudo %}
+<h1>Conferir um mês</h1>
+<p class="apoio">Mande os arquivos do mês juntos. Cada extrato é reconhecido pelo cabeçalho; o nome do arquivo não importa.</p>
+<h2>Arquivos</h2>
+<form class="envio" method="post" action="{% url 'painel:nova' %}" enctype="multipart/form-data">
+  {% csrf_token %}
+  {% if formulario.errors %}<ul class="erros">{% for erro in formulario.arquivos.errors %}<li>{{ erro }}</li>{% endfor %}</ul>{% endif %}
+  <label for="{{ formulario.arquivos.id_for_label }}">{{ formulario.arquivos.label }}</label>
+  {{ formulario.arquivos }}
+  <small class="apoio">{{ formulario.arquivos.help_text }}</small>
+  <button class="botao" type="submit">Conferir</button>
+</form>
+<h2>Conferências anteriores</h2>
+{% if conferencias %}
+<ul class="lista">
+  {% for c in conferencias %}
+  <li><a href="{% url 'painel:detalhe' c.pk %}"><span>{{ c }}</span><span>{% if c.alertas_graves %}{{ c.alertas_graves }} alerta{{ c.alertas_graves|pluralize }} grave{{ c.alertas_graves|pluralize }}{% else %}sem alerta grave{% endif %}</span></a></li>
+  {% endfor %}
+</ul>
+{% else %}
+<p class="apoio">Nenhuma ainda.</p>
+{% endif %}
+{% endblock %}
