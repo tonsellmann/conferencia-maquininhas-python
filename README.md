@@ -18,7 +18,7 @@ O trabalho é ler planilhas tortas e cruzar tabelas, e o pandas faz isso em pouc
 ## Rodar
 
 ```bash
-python -m venv .venv && .venv/Scripts/pip install -r requirements.txt
+python -m venv .venv && .venv/Scripts/pip install -r requirements-dev.txt
 python exemplos/gerar_exemplos.py
 python -m pytest -q
 python manage.py test painel
